@@ -112,8 +112,8 @@ function twho_person (name, line, wildcards, styles)
   local sent_output = 0
   local output = ""
   local output_redo = ""
-	for i, s in ipairs(styles) do
-		ColourTell(RGBColourToName(s.textcolour), "", s.text)
+  for i, s in ipairs(styles) do
+    ColourTell(RGBColourToName(s.textcolour), "", s.text)
     if sent_output == 0 and s.text == "]" then
       bracket_closes = bracket_closes + 1
     end
@@ -130,7 +130,7 @@ function twho_person (name, line, wildcards, styles)
       end
       sent_output = 1
     end
-	end
+  end
 end -- twho_person
 
 function twho_end (name, line, wildcards)

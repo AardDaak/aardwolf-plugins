@@ -10,3 +10,12 @@ Help for Daak's Practice All:
 
 This does plugin doesn't compute required practices (yet?)
 ```
+
+### Daak_Slot_Tracker.xml
+```
+Help for Daak's Slot Tracker:
+
+  dslot status  : Show your spins and winnings/losings
+  dslot reset   : Reset the spins/amounts
+  dslot help    : You're looking at it
+```

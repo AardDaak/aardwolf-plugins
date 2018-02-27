@@ -1,6 +1,7 @@
 # Aardwolf Plugins
 
 ### practice_all.xml
+```
 Help for Daak's Practice All:
 
   all   : Practice All available skills
@@ -8,3 +9,4 @@ Help for Daak's Practice All:
   help  : You're looking at it
 
 This does plugin doesn't compute required practices (yet?)
+```

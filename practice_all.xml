@@ -135,11 +135,11 @@ end -- prac_all
 
 function show_help ()
   Note("Help for Daak's Practice All:\n")
-  Tell(padRight("  all", 8, " "))
+  Tell(padRight("  dprac all", 12, " "))
   Note(": Practice All available skills")
-  Tell(padRight("  list", 8, " "))
+  Tell(padRight("  dprac list", 12, " "))
   Note(": List All available skills to be practiced")
-  Tell(padRight("  help", 8, " "))
+  Tell(padRight("  dprac help", 12, " "))
   Note(": You're looking at it\n")
   Note("This does plugin doesn't compute required practices (yet?)")
 end -- show_help

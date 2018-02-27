@@ -4,9 +4,9 @@
 ```
 Help for Daak's Practice All:
 
-  all   : Practice All available skills
-  list  : List All available skills to be practiced
-  help  : You're looking at it
+  dprac all   : Practice All available skills
+  dprac list  : List All available skills to be practiced
+  dprac help  : You're looking at it
 
 This does plugin doesn't compute required practices (yet?)
 ```

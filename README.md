@@ -19,3 +19,10 @@ Help for Daak's Slot Tracker:
   dslot reset   : Reset the spins/amounts
   dslot help    : You're looking at it
 ```
+
+### StatMonitor.xml
+```
+Copy over Bast's StatMonitor.xml
+ - Adds levelstats to: statmn report <duration>
+ - Includes levels, trains, trains per level, hp, mv, mp
+```

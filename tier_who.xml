@@ -140,7 +140,7 @@ end -- twho_end
 
 function tier_output (reallevel)
   local tiers = 0
-  local remorts = 1
+  local remorts = 0
   local level = 0
   reallevel = tonumber(reallevel)
   level = reallevel % 201

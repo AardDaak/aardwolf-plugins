@@ -140,22 +140,24 @@ end -- twho_end
 
 function tier_output (reallevel)
   local tiers = 0
-  local remorts = 0
+  local remorts = 1
   local level = 0
   reallevel = tonumber(reallevel)
+  level = reallevel % 201
+  if level == 0 then
+    level = 201
+  end
   if reallevel > 1407 then
     tiers = math.floor(reallevel / 1407)
   end
-  level = reallevel - 1407 * tiers
-  if level > 201 then
-    remorts = math.floor(level / 201)
+  remorts = math.ceil((reallevel - tiers * 1407) / 201)
+  if remorts == 0 then
+    remorts = 7
   end
-  level = level - remorts * 201
-  -- redo's
   if tiers > 9 then
     tiers = 9
   end
-  return "T" .. tiers .. "R" .. (remorts + 1) .. "L" .. level
+  return "T" .. tiers .. "R" .. remorts .. "L" .. level
 end --tier_output
 
 -- TODO combine with tier_output

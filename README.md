@@ -1,14 +1,21 @@
 # Aardwolf Plugins
 
-### practice_all.xml
+### training_extended.xml (replaced: practice_all.xml)
 ```
-Help for Daak's Practice All:
+Allow you to train in the following ways:
 
-  dprac all   : Practice All available skills
-  dprac list  : List All available skills to be practiced
-  dprac help  : You're looking at it
+  dtrain all             - Trains all stats 1 time
+  dtrain # all           - Train all stats # of times
+  dtrain str dex luck    - Train specific starts once
+  dtrain # str dex luck  - Train specific starts # of times
+  dtrain sdl             - Train specifc stats using short code (s)tr, (i)nt, (w)is, (d)ex, (c)con, (l)uck one time
+  dtrain # sdl           - Train specifc stats using short code (s)tr, (i)nt, (w)is, (d)ex, (c)con, (l)uck # of times
+  dtrain ssddllc         - Same as above, but lets multiple stats in a short way
+  dprac all              - Practices all available skills/spells
 
-This does plugin doesn't compute required practices (yet?)
+Suggested alias: #alias {tra *} {dtrain %1}
+
+Passing any unmatched parameters to in-game train command.
 ```
 
 ### tier_who.xml

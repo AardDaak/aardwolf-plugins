@@ -26,7 +26,7 @@ Allow you to train in the following ways:
   dtrain str dex luck   - Train specific starts once
   dtrain # str dex luck - Train specific starts # of times
   dtrain sdl            - Train specifc stats using short code (s)tr, (i)nt, (w)is, (d)ex, (c)con, (l)uck one time
-  dtrain #sdl           - Train specifc stats using short code (s)tr, (i)nt, (w)is, (d)ex, (c)con, (l)uck # of times
+  dtrain # sdl          - Train specifc stats using short code (s)tr, (i)nt, (w)is, (d)ex, (c)con, (l)uck # of times
   dtrain ssddllc        - Same as above, but lets multiple stats in a short way
   dprac all             - Practices all available skills/spells
 

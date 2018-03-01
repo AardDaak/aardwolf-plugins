@@ -45,19 +45,8 @@
 <triggers>
   <trigger
    enabled="n"
-   match="\[ *(?&lt;currlevel&gt;\d+) *(?&lt;race&gt;[\w-]+) *(?&lt;remort&gt;[\w\+]+)\] \[ *(?&lt;reallevel&gt;\d+) *\] (?&lt;person&gt;.*)"
+   match="\[.{15}\] \[ *(?&lt;reallevel&gt;\d+) *\] (?&lt;person&gt;.*)"
    name="twho_person"
-   script="twho_person"
-   sequence="100"
-   regexp="y"
-   group="twho_group"
-   omit_from_output="y"
-  >
-  </trigger>
-  <trigger
-   enabled="n"
-   match="^\[ *(?&lt;herotitle&gt;.*) *\] \[ *(?&lt;reallevel&gt;\d+) *\] (?&lt;person&gt;.*)$"
-   name="twho_hero"
    script="twho_person"
    sequence="100"
    regexp="y"
@@ -98,26 +87,19 @@ function twho_start (name, line, wildcards)
 end -- twho_start
 
 function twho_person (name, line, wildcards, styles)
-  local target_closes = 2
-  if name == "twho_hero" then
-    target_closes = 1
-  end
   -- [  1  Triton W+7] [  42010 ] Tier1
   -- [ 14  Eldar  H+7] [  18104 ] (HARDCORE) Member [Clan]
   -- [112  Wolf   P+2] [  22825 ] (OPK) Freekill [C]
   -- [   __________  ] [  43416 ] Superhero
   -- tprint(styles)
   -- tprint(wildcards)
-  local bracket_closes = 0
+  local length_sent = 0
   local sent_output = 0
   local output = ""
   local output_redo = ""
   for i, s in ipairs(styles) do
     ColourTell(RGBColourToName(s.textcolour), "", s.text)
-    if sent_output == 0 and s.text == "]" then
-      bracket_closes = bracket_closes + 1
-    end
-    if sent_output == 0 and bracket_closes == target_closes then
+    if length_sent > 26 and sent_output == 0 then
       output = tier_output(wildcards.reallevel)
       ColourTell("yellow", "", " [ ")
       ColourTell("red", "", padRight(output, 8, " "))
@@ -130,6 +112,7 @@ function twho_person (name, line, wildcards, styles)
       end
       sent_output = 1
     end
+    length_sent = length_sent + s.length
   end
 end -- twho_person
 

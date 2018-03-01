@@ -11,7 +11,7 @@
    author="Daak"
    id="5a0cf36701b3f475a9e013e8"
    language="Lua"
-   purpose="Training Extending inlcudes Practice All"
+   purpose="Training Extending inlcudes Max training and Practice All"
    save_state="y"
    date_written="2018-02-27 20:02:14"
    requires="5.06"
@@ -21,19 +21,19 @@
 <![CDATA[
 Allows you to train in the following ways:
 
-  dtrain all            - Trains all stats 1 time
-  dtrain # all          - Train all stats # of times
-  dtrain str dex luck   - Train specific starts once
-  dtrain # str dex luck - Train specific starts # of times
-  dtrain sdl            - Train specifc stats using short code (s)tr, (i)nt, (w)is, (d)ex, (c)con, (l)uck one time
-  dtrain # sdl          - Train specifc stats using short code (s)tr, (i)nt, (w)is, (d)ex, (c)con, (l)uck # of times
-  dtrain ssddllc        - Same as above, but lets multiple stats in a short way
-  dtrain max str        - Train str to max
-  dtrain max str dex    - Max can take multiple stats
-  dtrain max sdl        - And short versions as well
-  dprac all             - Practices all available skills/spells
+  xtrain all            - Trains all stats 1 time
+  xtrain # all          - Train all stats # of times
+  xtrain str dex luck   - Train specific starts once
+  xtrain # str dex luck - Train specific starts # of times
+  xtrain sdl            - Train specifc stats using short code (s)tr, (i)nt, (w)is, (d)ex, (c)con, (l)uck one time
+  xtrain # sdl          - Train specifc stats using short code (s)tr, (i)nt, (w)is, (d)ex, (c)con, (l)uck # of times
+  xtrain ssddllc        - Same as above, but lets multiple stats in a short way
+  xtrain max str        - Train str to max
+  xtrain max str dex    - Max can take multiple stats
+  xtrain max sdl        - And short versions as well
+  xprac all             - Practices all available skills/spells
 
-Suggested alias: #alias {tra *} {dtrain %1}
+Suggested alias: #alias {tra *} {xtrain %1}
 
 Passing any unmatched parameters to in-game train command.
 ]]>
@@ -59,36 +59,36 @@ Passing any unmatched parameters to in-game train command.
     enabled="y" regexp="y" sequence="100" ignore_case="y"
     >
   </alias>
-  <alias match="^dtrai?n?$"
+  <alias match="^xtrai?n?$"
     script="OnHelp"
     enabled="y" regexp="y" sequence="100" ignore_case="y"
     >
   </alias>
-  <alias match="^dtrai?n? all$"
+  <alias match="^xtrai?n? all$"
     script="train"
     name="train_all"
     enabled="y" regexp="y" sequence="100" ignore_case="y"
     >
   </alias>
-  <alias match="^dtrai?n? (?&lt;amount&gt;\d+) all$"
+  <alias match="^xtrai?n? (?&lt;amount&gt;\d+) all$"
     script="train"
     name="train_all_number"
     enabled="y" regexp="y" sequence="100" ignore_case="y"
     >
   </alias>
-  <alias match="^dtrai?n? max (?&lt;params&gt;.*)$"
+  <alias match="^xtrai?n? max (?&lt;params&gt;.*)$"
     script="train"
     name="train_params_max"
     enabled="y" regexp="y" sequence="199" ignore_case="y"
     >
   </alias>
-  <alias match="^dtrai?n? (?&lt;amount&gt;\d+) (?&lt;params&gt;.*)$"
+  <alias match="^xtrai?n? (?&lt;amount&gt;\d+) (?&lt;params&gt;.*)$"
     script="train"
     name="train_params_number"
     enabled="y" regexp="y" sequence="200" ignore_case="y"
     >
   </alias>
-  <alias match="^dtrai?n? (?&lt;params&gt;.*)$"
+  <alias match="^xtrai?n? (?&lt;params&gt;.*)$"
     script="train"
     name="train_params"
     enabled="y" regexp="y" sequence="201" ignore_case="y"
@@ -96,7 +96,7 @@ Passing any unmatched parameters to in-game train command.
   </alias>
   <alias
    script="OnHelp"
-   match="^dtrai?n? help$"
+   match="^xtrai?n? help$"
    enabled="y" regexp="y" sequence="100" ignore_case="y"
   >
   </alias>
@@ -212,7 +212,7 @@ function maxstat_line (name, line, wildcards)
   local shortstats = {["Strength"] = "str", ["Intelligence"] = "int", ["Wisdom"] = "wis", ["Dexterity"] = "dex", ["Constitution"] = "con", ["Luck"] = "luck"}
   local stat = shortstats[wildcards.statlong]
   if stat == nil then
-    Note("dtrain - Error - Unexpected Stat found " .. wildcards.statlong)
+    Note("xtrain - Error - Unexpected Stat found " .. wildcards.statlong)
     return
   end
   local statmax = tonumber(wildcards.statmax)
@@ -335,7 +335,7 @@ function train (name, line, wildcards)
       end
     end
   else
-    Note("Failed to load anything to dtrain, passing to in-game train")
+    Note("Failed to load anything to xtrain, passing to in-game train")
     Send("train " .. wildcards[1])
     return
   end

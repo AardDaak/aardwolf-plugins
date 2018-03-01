@@ -4,19 +4,19 @@
 ```
 Allow you to train in the following ways:
 
-  dtrain all             - Trains all stats 1 time
-  dtrain # all           - Train all stats # of times
-  dtrain str dex luck    - Train specific starts once
-  dtrain # str dex luck  - Train specific starts # of times
-  dtrain sdl             - Train specifc stats using short code (s)tr, (i)nt, (w)is, (d)ex, (c)con, (l)uck one time
-  dtrain # sdl           - Train specifc stats using short code (s)tr, (i)nt, (w)is, (d)ex, (c)con, (l)uck # of times
-  dtrain ssddllc         - Same as above, but lets multiple stats in a short way
-  dtrain max str         - Train str to max
-  dtrain max str dex     - Max can take multiple stats
-  dtrain max sdl         - And short versions as well
-  dprac all              - Practices all available skills/spells
+  xtrain all             - Trains all stats 1 time
+  xtrain # all           - Train all stats # of times
+  xtrain str dex luck    - Train specific starts once
+  xtrain # str dex luck  - Train specific starts # of times
+  xtrain sdl             - Train specifc stats using short code (s)tr, (i)nt, (w)is, (d)ex, (c)con, (l)uck one time
+  xtrain # sdl           - Train specifc stats using short code (s)tr, (i)nt, (w)is, (d)ex, (c)con, (l)uck # of times
+  xtrain ssddllc         - Same as above, but lets multiple stats in a short way
+  xtrain max str         - Train str to max
+  xtrain max str dex     - Max can take multiple stats
+  xtrain max sdl         - And short versions as well
+  xprac all              - Practices all available skills/spells
 
-Suggested alias: #alias {tra *} {dtrain %1}
+Suggested alias: #alias {tra *} {xtrain %1}
 
 Passing any unmatched parameters to in-game train command.
 ```

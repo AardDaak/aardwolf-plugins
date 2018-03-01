@@ -11,6 +11,9 @@ Allow you to train in the following ways:
   dtrain sdl             - Train specifc stats using short code (s)tr, (i)nt, (w)is, (d)ex, (c)con, (l)uck one time
   dtrain # sdl           - Train specifc stats using short code (s)tr, (i)nt, (w)is, (d)ex, (c)con, (l)uck # of times
   dtrain ssddllc         - Same as above, but lets multiple stats in a short way
+  dtrain max str         - Train str to max
+  dtrain max str dex     - Max can take multiple stats
+  dtrain max sdl         - And short versions as well
   dprac all              - Practices all available skills/spells
 
 Suggested alias: #alias {tra *} {dtrain %1}

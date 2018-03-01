@@ -19,7 +19,7 @@
    >
 <description trim="y">
 <![CDATA[
-Allow you to train in the following ways:
+Allows you to train in the following ways:
 
   dtrain all            - Trains all stats 1 time
   dtrain # all          - Train all stats # of times
@@ -28,6 +28,9 @@ Allow you to train in the following ways:
   dtrain sdl            - Train specifc stats using short code (s)tr, (i)nt, (w)is, (d)ex, (c)con, (l)uck one time
   dtrain # sdl          - Train specifc stats using short code (s)tr, (i)nt, (w)is, (d)ex, (c)con, (l)uck # of times
   dtrain ssddllc        - Same as above, but lets multiple stats in a short way
+  dtrain max str        - Train str to max
+  dtrain max str dex    - Max can take multiple stats
+  dtrain max sdl        - And short versions as well
   dprac all             - Practices all available skills/spells
 
 Suggested alias: #alias {tra *} {dtrain %1}
@@ -73,6 +76,12 @@ Passing any unmatched parameters to in-game train command.
     enabled="y" regexp="y" sequence="100" ignore_case="y"
     >
   </alias>
+  <alias match="^dtrai?n? max (?&lt;params&gt;.*)$"
+    script="train"
+    name="train_params_max"
+    enabled="y" regexp="y" sequence="199" ignore_case="y"
+    >
+  </alias>
   <alias match="^dtrai?n? (?&lt;amount&gt;\d+) (?&lt;params&gt;.*)$"
     script="train"
     name="train_params_number"
@@ -116,16 +125,41 @@ Passing any unmatched parameters to in-game train command.
    omit_from_output="n"
   >
   </trigger>
+  <trigger
+   enabled="n"
+   match="^(?&lt;statlong&gt;Strength|Intelligence|Wisdom|Dexterity|Constitution|Luck) *:.{35} *(?&lt;statcur&gt;\d+) *(?&lt;statmax&gt;\d+)$"
+   name="maxstat_line"
+   script="maxstat_line"
+   sequence="100"
+   regexp="y"
+   group="maxstat_group"
+   omit_from_output="n"
+  >
+  </trigger>
+  <trigger
+   enabled="n"
+   match="^You have \d+ training sessions available.$"
+   name="maxstat_end"
+   script="maxstat_end"
+   sequence="100"
+   regexp="y"
+   group="maxstat_group"
+   omit_from_output="n"
+  >
+  </trigger>
 </triggers>
 
 <script>
 <![CDATA[
 
---require "tprint"
+require "tprint"
 
 skills_count = 0
 skills_found = {}
+curstats = {}
+maxstats = {}
 do_practice = 0
+saved_params = ""
 
 function prac_start (name, line, wildcards)
   local cmd = wildcards.cmd
@@ -168,6 +202,40 @@ function prac_end (name, line, wildcards)
   prac_all()
 end -- prac_end
 
+function get_max_stats ()
+  EnableTriggerGroup("maxstat_group", true)
+  Send("train")
+end -- get_max_stats
+
+function maxstat_line (name, line, wildcards)
+  --  Strength     :      1     -1      0      0      1       51       52
+  local shortstats = {["Strength"] = "str", ["Intelligence"] = "int", ["Wisdom"] = "wis", ["Dexterity"] = "dex", ["Constitution"] = "con", ["Luck"] = "luck"}
+  local stat = shortstats[wildcards.statlong]
+  if stat == nil then
+    Note("dtrain - Error - Unexpected Stat found " .. wildcards.statlong)
+    return
+  end
+  local statmax = tonumber(wildcards.statmax)
+  if statmax ~= nil then
+    --Note(stat .. " max = " .. statmax)
+    maxstats[stat] = statmax
+  end
+  local statcur = tonumber(wildcards.statcur)
+  if statcur ~= nil then
+    --Note(stat .. " cur = " .. statcur)
+    curstats[stat] = statcur
+  end
+end -- maxstat_line
+
+function maxstat_end (name, line, wildcards)
+  --Note("maxstat_end called")
+  --tprint(maxstats)
+  EnableTriggerGroup("maxstat_group", false)
+  local pass = {}
+  pass.params = saved_params
+  train("train_params_have_maxstats", 1, pass)
+end -- maxstat_end
+
 function prac_all ()
   if skills_count < 1 then
     Note("No skills to practice.")
@@ -188,6 +256,7 @@ end -- prac_all
 function train (name, line, wildcards)
   -- Note(name)
   local params = wildcards.params
+  local stats_to_train = {}
   if params == "help" then
     OnHelp()
     return
@@ -210,33 +279,23 @@ function train (name, line, wildcards)
     if name == "train_params_number" then
       amount_to_train = wildcards.amount
     end
-    for i in string.gmatch(wildcards.params, "%S+") do
-      if i == "str" or i == "int" or i == "wis" or i == "dex" or i == "con" or i == "luck" then
-        table.insert(trains, {stat=i,amount=amount_to_train})
-      else
-        -- parse potential siwdcl string
-        local matches = string.match(wildcards.params, "^([siwdcl]+)$");
-        if matches == nil then
-          pass_thru = 1
-        else
-          for i in string.gmatch(wildcards.params, "[siwdcl]") do
-            local stat_name = ""
-            if i == "s" then
-              stat_name = "str"
-            elseif i == "i" then
-              stat_name = "int"
-            elseif i == "w" then
-              stat_name = "wis"
-            elseif i == "d" then
-              stat_name = "dex"
-            elseif i == "c" then
-              stat_name = "con"
-            elseif i == "l" then
-              stat_name = "luck"
-            end
-            if stat_name ~= "" then
-              table.insert(trains, {stat=stat_name,amount=amount_to_train})
-            end
+    stats_to_train = parse_params(wildcards.params)
+    if tableCountItems(stats_to_train) > 0 then
+      for i,v in pairs(stats_to_train) do
+        table.insert(trains, {stat=v,amount=amount_to_train})
+      end
+    end
+  elseif name == "train_params_max" then
+    get_max_stats()
+    saved_params = wildcards.params
+  elseif name =="train_params_have_maxstats" then
+    stats_to_train = parse_params(wildcards.params)
+    if tableCountItems(stats_to_train) > 0 then
+      for i,v in pairs(stats_to_train) do
+        if maxstats[v] ~= nil and curstats[v] ~= nil then
+          local amount_to_max = maxstats[v] - curstats[v]
+          if amount_to_max > 0 then
+            table.insert(trains, {stat=v,amount=amount_to_max})
           end
         end
       end
@@ -278,9 +337,41 @@ function train (name, line, wildcards)
   end
 end -- train
 
-function guess_stat(passed) 
+function parse_params (params)
+  local return_stats = {}
+  for i in string.gmatch(params, "%S+") do
+    if i == "str" or i == "int" or i == "wis" or i == "dex" or i == "con" or i == "luck" then
+      table.insert(return_stats, i)
+    else
+      -- parse potential siwdcl string
+      local matches = string.match(params, "^([siwdcl]+)$");
+      if matches ~= nil then
+        for i in string.gmatch(params, "[siwdcl]") do
+          local stat_name = ""
+          if i == "s" then
+            stat_name = "str"
+          elseif i == "i" then
+            stat_name = "int"
+          elseif i == "w" then
+            stat_name = "wis"
+          elseif i == "d" then
+            stat_name = "dex"
+          elseif i == "c" then
+            stat_name = "con"
+          elseif i == "l" then
+            stat_name = "luck"
+          end
+          if stat_name ~= "" then
+            table.insert(return_stats, stat_name)
+          end
+        end
+      end
+    end
+  end
+  --tprint(return_stats)
+  return return_stats
+end
   
-end --guess_stat
 function show_prac_help ()
   Note("Help for Daak's Practice All:\n")
   Tell(padRight("  dprac all", 12, " "))

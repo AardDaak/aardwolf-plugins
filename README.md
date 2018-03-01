@@ -43,4 +43,5 @@ Help for Daak's Slot Tracker:
 Copy over Bast's StatMonitor.xml
  - Adds levelstats to: statmn report <duration>
  - Includes levels, trains, trains per level, hp, mv, mp
+ - See StatMonitor.xml.diff for changes
 ```

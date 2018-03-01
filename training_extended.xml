@@ -138,7 +138,7 @@ Passing any unmatched parameters to in-game train command.
   </trigger>
   <trigger
    enabled="n"
-   match="^You have \d+ training sessions available.$"
+   match="^You have \d+ total stats out of \d+ maximum.$"
    name="maxstat_end"
    script="maxstat_end"
    sequence="100"
@@ -233,7 +233,7 @@ function maxstat_end (name, line, wildcards)
   EnableTriggerGroup("maxstat_group", false)
   local pass = {}
   pass.params = saved_params
-  train("train_params_have_maxstats", 1, pass)
+  train("train_params_have_maxstats", "", pass)
 end -- maxstat_end
 
 function prac_all ()
@@ -254,7 +254,6 @@ function prac_all ()
 end -- prac_all
 
 function train (name, line, wildcards)
-  -- Note(name)
   local params = wildcards.params
   local stats_to_train = {}
   if params == "help" then
@@ -288,7 +287,8 @@ function train (name, line, wildcards)
   elseif name == "train_params_max" then
     get_max_stats()
     saved_params = wildcards.params
-  elseif name =="train_params_have_maxstats" then
+    return
+  elseif name == "train_params_have_maxstats" then
     stats_to_train = parse_params(wildcards.params)
     if tableCountItems(stats_to_train) > 0 then
       for i,v in pairs(stats_to_train) do
@@ -299,6 +299,10 @@ function train (name, line, wildcards)
           end
         end
       end
+    end
+    if tableCountItems(trains) == 0 then
+      Note("\nDesired stats are already at max.")
+      return
     end
   else
     pass_thru = 1

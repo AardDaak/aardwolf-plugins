@@ -203,6 +203,8 @@ function prac_end (name, line, wildcards)
 end -- prac_end
 
 function get_max_stats ()
+  curstats = {}
+  maxstats = {}
   EnableTriggerGroup("maxstat_group", true)
   Send("train")
 end -- get_max_stats

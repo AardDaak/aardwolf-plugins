@@ -42,6 +42,7 @@ Help for Daak's Slot Tracker:
 ```
 Copy over Bast's StatMonitor.xml
  - Adds levelstats to: statmn report <duration>
+ - Allows #h or #d for duration, converts, example: 8h = 8 hours or 2d = 2 days
  - Includes levels, trains, trains per level, hp, mv, mp
  - See StatMonitor.xml.diff for changes
 ```

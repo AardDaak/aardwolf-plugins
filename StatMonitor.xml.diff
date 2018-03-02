@@ -6,10 +6,10 @@
 >       for a in db.db:rows(string.format("SELECT COUNT(*), SUM(trains + bonustrains + blessingtrains), SUM(hp), SUM(mv), SUM(mp), SUM(pracs) FROM levels where type = 'level' and starttime > %d;", starttime)) do
 >         levelstats.total = a[1] or 0
 >         levelstats.trains = a[2] or 0
-> 	levelstats.trainsperlevel = 0
-> 	if levelstats.total > 0 then
-> 	  levelstats.trainsperlevel = roundto(levelstats.trains / levelstats.total, 2)
-> 	end
+>         levelstats.trainsperlevel = 0
+>         if levelstats.total > 0 then
+>           levelstats.trainsperlevel = roundto(levelstats.trains / levelstats.total, 2)
+>           end
 >         levelstats.hp = a[3]  or 0
 >         levelstats.mv = a[4] or 0
 >         levelstats.mp = a[5] or 0
@@ -18,10 +18,10 @@
 >       for a in db.db:rows(string.format("SELECT COUNT(*), SUM(trains + bonustrains + blessingtrains), SUM(hp), SUM(mv), SUM(mp), SUM(pracs) FROM levels where type = 'pup' and starttime > %d;", starttime)) do
 >         pupstats.total = a[1] or 0
 >         pupstats.trains = a[2] or 0
-> 	pupstats.trainsperlevel = 0
-> 	if pupstats.total > 0 then
-> 	  pupstats.trainsperlevel = roundto(pupstats.trains / pupstats.total, 2)
-> 	end
+>         pupstats.trainsperlevel = 0
+>         if pupstats.total > 0 then
+>           pupstats.trainsperlevel = roundto(pupstats.trains / pupstats.total, 2)
+>         end
 >       end
 >     end
 545a570,579
@@ -35,7 +35,18 @@
 >   ColourNote(RGBColourToName(var.plugin_colour), "black", "MV\t" .. levelstats.mv)
 >   ColourNote(RGBColourToName(var.plugin_colour), "black", "MP\t" .. levelstats.mp)
 >   ColourNote(RGBColourToName(var.plugin_colour), "black",   "----------------------------------------------------")
-693a728,738
+608c642,649
+<       minutes = tonumber(cmddict[1])
+---
+>       minutes = cmddict[1]
+>       if minutes ~= nil and string.sub(minutes, -1) == "h" then
+>         minutes = (60 * tonumber(string.sub(minutes, 1, string.len(minutes) -1))) or var.reportminutes
+>       elseif minutes ~= nil and string.sub(minutes, -1) == "d" then
+>         minutes = (24 * 60 * tonumber(string.sub(minutes, 1, string.len(minutes) -1))) or var.reportminutes
+>       else
+>         minutes = tonumber(minutes)
+>       end
+693a735,745
 > function roundto(val, decimal)
 >   local tval = -1
 >   --print('rounding', val, ' to ', decimal, 'places')

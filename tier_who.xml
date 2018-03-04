@@ -45,7 +45,7 @@
 <triggers>
   <trigger
    enabled="n"
-   match="\[.{15}\] \[ *(?&lt;reallevel&gt;\d+) *\] (?&lt;person&gt;.*)"
+   match="^\[.{15}\] \[ *(?&lt;reallevel&gt;\d+) *\] (?&lt;person&gt;.*)$"
    name="twho_person"
    script="twho_person"
    sequence="100"
@@ -131,7 +131,11 @@ function tier_output (reallevel)
     level = 201
   end
   if reallevel > 1407 then
-    tiers = math.floor(reallevel / 1407)
+    if reallevel % 1407 == 0 then
+      tiers = reallevel / 1407 - 1
+    else
+      tiers = math.floor(reallevel / 1407)
+    end
   end
   remorts = math.ceil((reallevel - tiers * 1407) / 201)
   if remorts == 0 then

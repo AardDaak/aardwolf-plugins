@@ -288,7 +288,7 @@ function pp_check_end()
 end -- pp_check_end
 
 function update_timer ()
-  Note(time_left, time_left_text, recovery_left, recovery_left_text)
+  -- Note(time_left, time_left_text, recovery_left, recovery_left_text)
   if time_left > 0 then
     time_left = time_left - 30
   end
@@ -311,11 +311,6 @@ end
 -- Window Stuff --
 
 -- Utils  --
-
-function parseTime(str)
-  local seconds = 0
-  local minutes = 0
-end
 
 function tableCountItems(ttable)
   local count = 0

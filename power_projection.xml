@@ -177,7 +177,7 @@ function draw_time ()
     text = recovery_left_text
     text_color = "slategray"
   end
-  --Note(text, text_color)
+  -- Note(text, text_color)
   WindowFont (win, "f", "Inconsolata", 14, true, false, false, false) -- define font
   width   = WindowTextWidth (win, "f", text)  -- width of text  (270)
   height  = WindowFontInfo (win, "f", 1)   -- height of the font  (46)
@@ -228,12 +228,16 @@ function OnPluginDisable ()
   window_delete()
 end -- function
 
-function pp_active()
-  pp_check()
+function pp_active(name, line, wildcards)
+  if name == "pp_active" then
+    pp_check()
+  end
   window_create("red")
 end -- pp_active
 
 function pp_ready()
+  havePP = false
+  havePPRecovery = false
   time_left = 0
   recovery_left = 0
   time_left_text = ""

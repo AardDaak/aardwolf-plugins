@@ -105,7 +105,7 @@ PS: The function names are pp, yes this is pee pee. Hah! All finished?
   </trigger>
   <trigger
    enabled="n"
-   match="^  Power projection         : enhanced magic attacks \([0-9:]+\)$"
+   match="^  Power projection         : enhanced magic attacks \(([0-9]+):([0-9]+)\)$"
    name="pp_check_enabled"
    script="pp_check_enabled"
    sequence="100"
@@ -116,7 +116,7 @@ PS: The function names are pp, yes this is pee pee. Hah! All finished?
   </trigger>
   <trigger
    enabled="n"
-   match="^  Projection               : [0-9:]+$"
+   match="^  Projection               : ([0-9]+):([0-9]+)$"
    name="pp_check_recovery"
    script="pp_check_recovery"
    sequence="100"
@@ -138,31 +138,78 @@ PS: The function names are pp, yes this is pee pee. Hah! All finished?
   </trigger>
 </triggers>
 
+<timers>
+  <timer
+      script="update_timer"
+      enabled="n"
+      second="30.00"
+      name="pp_timer"
+      >
+  </timer>
+</timers>
+
 <script>
 <![CDATA[
 
 require "tprint"
 require "movewindow"
+require "commas"
 
 window_init = false
 win = "win" .. GetPluginID ()
 
+time_left = 0
+time_left_text = ""
+recovery_left = 0
+recovery_left_text = ""
+last_color = "cyan"
+
 havePP = false
 havePPRecovery = false
+
+function draw_time ()
+  local text = ""
+  local text_color = "black"
+  if havePP then
+    text = time_left_text
+    text_color = "red"
+  elseif havePPRecovery then
+    text = recovery_left_text
+    text_color = "slategray"
+  end
+  --Note(text, text_color)
+  WindowFont (win, "f", "Inconsolata", 14, true, false, false, false) -- define font
+  width   = WindowTextWidth (win, "f", text)  -- width of text  (270)
+  height  = WindowFontInfo (win, "f", 1)   -- height of the font  (46)
+  ascent  = WindowFontInfo (win, "f", 2)   -- ascent (amount above the baseline)  (36)
+  descent = WindowFontInfo (win, "f", 3)   -- descent (amount below the baseline) (10)
+  leading = WindowFontInfo (win, "f", 4)   -- leading (space above the highest letter) (9)
+  WindowText (win, "f", 
+                  text,   -- text
+                  24, 28, 0, 0,        -- rectangle
+                  ColourNameToRGB (text_color), -- colour
+                  false)              -- not Unicode
+end
 
 function window_create(color)
   if window_init == false then
     WindowCreate (win, 0, 0, 70, 70, miniwin.pos_center_all, 0, ColourNameToRGB("black"))
     WindowShow (win, true)
   end
+  WindowPolygon (win, "0,0,0,70,0,70,70,70,70,70,70,0,70,0,0,0",
+    ColourNameToRGB("black"), miniwin.pen_solid, 4,
+    ColourNameToRGB("black"), miniwin.brush_solid, true, false)
   WindowArc (win, 10, 10, 60, 60, 18, 10, 53, 10, ColourNameToRGB (color), miniwin.pen_solid, 4)
   WindowLine (win, 35, 3, 35, 28, ColourNameToRGB (color), miniwin.pen_solid, 4)
+  draw_time()
   --- install the window movement handler, get back the window position.
   movewindow.add_drag_handler (win, 0, 0, 70, 70, miniwin.cursor_both_arrow)
   window_init = true
+  last_color = color
 end -- window_create
 
 window_create("cyan")
+windowinfo = movewindow.install (win, miniwin.pos_top_right, miniwin.create_absolute_location, false, nil, {mouseup=MouseUp, mousedown=LeftClickOnly, dragmove=LeftClickOnly, dragrelease=LeftClickOnly},{x=default_x, y=default_y})
 
 function window_delete()
   WindowDelete(win)
@@ -187,6 +234,12 @@ end -- pp_active
 
 function pp_ready()
   window_create("yellow")
+  time_left = 0
+  recovery_left = 0
+  time_left_text = ""
+  recovery_left_text = ""
+  draw_time()
+  EnableTimer("pp_timer", false)
 end -- pp_ready
 
 function pp_limp()
@@ -202,16 +255,27 @@ end -- pp_check
 
 pp_check()
 
-function pp_check_enabled()
+function pp_check_enabled(name, line, wildcards)
   havePP = true
+  local minutes = tonumber(wildcards[1])
+  local seconds = tonumber(wildcards[2])
+  time_left = minutes * 60 + seconds
+  time_left_text = convert_time(time_left)
+  time_left_text = time_left_text:gsub("%s+", "")
 end -- pp_check_enabled
 
-function pp_check_recovery()
+function pp_check_recovery(name, line, wildcards)
   havePPRecovery = true
+  local minutes = tonumber(wildcards[1])
+  local seconds = tonumber(wildcards[2])
+  recovery_left = minutes * 60 + seconds
+  recovery_left_text = convert_time(recovery_left)
+  recovery_left_text = recovery_left_text:gsub("%s+", "")
 end -- pp_check_recovery
 
 function pp_check_end()
   EnableTriggerGroup("pp_check_group", false)
+  EnableTimer("pp_timer", true)
   if havePP then
     pp_active()
     return
@@ -223,9 +287,35 @@ function pp_check_end()
   pp_ready()
 end -- pp_check_end
 
+function update_timer ()
+  Note(time_left, time_left_text, recovery_left, recovery_left_text)
+  if time_left > 0 then
+    time_left = time_left - 30
+  end
+  if recovery_left > 0 then
+    recovery_left = recovery_left - 30
+  end
+  if time_left < 0 then
+   time_left = 0
+  end
+  if recovery_left < 0 then
+   recovery_left = 0
+  end
+  time_left_text = convert_time(time_left)
+  time_left_text = time_left_text:gsub("%s+", "")
+  recovery_left_text = convert_time(recovery_left)
+  recovery_left_text = recovery_left_text:gsub("%s+", "")
+  window_create(last_color)
+end
+
 -- Window Stuff --
 
 -- Utils  --
+
+function parseTime(str)
+  local seconds = 0
+  local minutes = 0
+end
 
 function tableCountItems(ttable)
   local count = 0

@@ -46,3 +46,21 @@ Copy over Bast's StatMonitor.xml
  - Includes levels, trains, trains per level, hp, mv, mp
  - See StatMonitor.xml.diff for changes
 ```
+
+### power_projection.xml
+```
+Keeps track of Power Project status in a miniwindow.
+
+  red       - active
+  yellow    - ready
+  slategray - on recovery
+
+  pp check  - Forces the re-check of power project status
+  pp ready  - Sets power projection to ready
+  pp active - Sets power projection to active
+  pp limp   - Sets power projection recovery
+  pp help   - Your looking at it
+
+NOTE: Aliases are only to set states, plugins automatically switches start based on power project triggers.
+PS: The function names are pp, yes this is pee pee. Hah! All finished?
+```

@@ -229,20 +229,21 @@ function OnPluginDisable ()
 end -- function
 
 function pp_active()
+  pp_check()
   window_create("red")
 end -- pp_active
 
 function pp_ready()
-  window_create("yellow")
   time_left = 0
   recovery_left = 0
   time_left_text = ""
   recovery_left_text = ""
-  draw_time()
   EnableTimer("pp_timer", false)
+  window_create("yellow")
 end -- pp_ready
 
 function pp_limp()
+  havePP = false
   window_create("slategray")
 end -- pp_limp
 

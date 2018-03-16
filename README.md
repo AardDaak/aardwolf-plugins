@@ -60,3 +60,8 @@ Keeps track of Power Project status in a miniwindow.
 NOTE: Aliases are only to set states, plugins automatically switches state based on power projection triggers.
 PS: The function names are pp, yes this is pee pee. Hah! All finished?
 ```
+
+### ctrl_backspakce.xml
+```
+Makes CTRL+Backspace delete the last word in the command input
+```

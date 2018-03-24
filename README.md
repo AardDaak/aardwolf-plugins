@@ -65,3 +65,10 @@ PS: The function names are pp, yes this is pee pee. Hah! All finished?
 ```
 Makes CTRL+Backspace delete the last word in the command input
 ```
+
+### room_chars.xml
+```
+requires Bas t's plugins: https://github.com/endavis/bastmush
+Put this plugin inside Bast's folder: 
+Show roomchars in a miniwindow with styling
+```

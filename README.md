@@ -72,3 +72,11 @@ Requires Bast's plugins: https://github.com/endavis/bastmush
 Put this plugin inside Bast's folder: 
 Show roomchars in a miniwindow with styling
 ```
+
+### cycle_tabs.xml
+```
+Cycle through chat channel tabs with Alt+right and Alt+left
+Order via aliases:
+  settab # -- number of tab starting at 1
+  settab <name> -- name of tab
+```

@@ -53,7 +53,11 @@ function tableCountItems(ttable)
 end
 
 function cPlugin(str)
-  CallPlugin("b555825a4a5700c35fa80780", "setTab", str)
+  if str == "prevTab" or str == "nextTab" then
+    CallPlugin("b555825a4a5700c35fa80780", str)
+  else
+    CallPlugin("b555825a4a5700c35fa80780", "setTab", str)
+  end
   CallPlugin("b555825a4a5700c35fa80780", "SaveState")
 end
 
@@ -64,35 +68,25 @@ loadstring(GetPluginVariable("b555825a4a5700c35fa80780", "tabs_names") or "")()
 num_tabs = tableCountItems(tabs_names)
 
 function nextTab()
-   local next_tab = current_tab + 1
-   if next_tab > num_tabs then
-     next_tab = 1
-   end
-   current_tab = next_tab
-   cPlugin(next_tab)
+  cPlugin("nextTab")
 end
 
 function prevTab()
-   local prev_tab = current_tab - 1
-   if prev_tab < 1 then
-     prev_tab = num_tabs
-   end
-   current_tab = prev_tab
-   cPlugin(prev_tab)
+  cPlugin("prevTab")
 end
 
 function tabset(name, line, wildcards)
-    local str = wildcards[1]
-    if tabs_names[tonumber(str)] then
-        cPlugin(str)
-    else
-        for i,v in pairs(tabs_names) do
-            if v:upper() == str:upper() then
-                cPlugin(i)
-                break
-            end
-        end
+  local str = wildcards[1]
+  if tabs_names[tonumber(str)] then
+    cPlugin(str)
+  else
+    for i,v in pairs(tabs_names) do
+      if v:upper() == str:upper() then
+        cPlugin(i)
+        break
+      end
     end
+  end
 end
 
 Accelerator("alt + right", '\\\\\\CallPlugin("3a01e1807c17390aa06135a8", "nextTab")')

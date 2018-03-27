@@ -68,14 +68,17 @@ loadstring(GetPluginVariable("b555825a4a5700c35fa80780", "tabs_names") or "")()
 num_tabs = tableCountItems(tabs_names)
 
 function nextTab()
+  loadstring(GetPluginVariable("b555825a4a5700c35fa80780", "tabs_names") or "")()
   cPlugin("nextTab")
 end
 
 function prevTab()
+  loadstring(GetPluginVariable("b555825a4a5700c35fa80780", "tabs_names") or "")()
   cPlugin("prevTab")
 end
 
 function tabset(name, line, wildcards)
+  loadstring(GetPluginVariable("b555825a4a5700c35fa80780", "tabs_names") or "")()
   local str = wildcards[1]
   if tabs_names[tonumber(str)] then
     cPlugin(str)

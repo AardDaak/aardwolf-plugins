@@ -78,7 +78,7 @@ function prevTab()
      prev_tab = num_tabs
    end
    current_tab = prev_tab
-   cPlugin(next_tab)
+   cPlugin(prev_tab)
 end
 
 function tabset(name, line, wildcards)

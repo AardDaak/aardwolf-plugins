@@ -11,7 +11,7 @@
    author="Daak"
    id="3a01e1807c17390aa06135a8"
    language="Lua"
-   purpose="Cycle through channel tabs"
+   purpose="Cycle through channel tabs via accelerator"
    save_state="y"
    date_written="2018-03-25 21:49:47"
    requires="5.06"
@@ -39,57 +39,24 @@
 
 <script>
 <![CDATA[
-function tableCountItems(ttable)
-  local count = 0
-  for i,v in pairs(ttable) do
-    count = count + 1
-  end
-  if count == 0 then
-    for i,v in ipairs(ttable) do
-      count = count + 1
-    end
-  end
-  return count
-end
-
 function cPlugin(str)
   if str == "prevTab" or str == "nextTab" then
     CallPlugin("b555825a4a5700c35fa80780", str)
   else
-    CallPlugin("b555825a4a5700c35fa80780", "setTab", str)
+    CallPlugin("b555825a4a5700c35fa80780", "setTabByName", str)
   end
-  CallPlugin("b555825a4a5700c35fa80780", "SaveState")
 end
 
--- this won't be accurate with a Save but maybe it does not matter
--- as long as num_tabs is correct eventually we sync up
-current_tab = GetPluginVariable("b555825a4a5700c35fa80780", "current_tab")
-loadstring(GetPluginVariable("b555825a4a5700c35fa80780", "tabs_names") or "")()
-num_tabs = tableCountItems(tabs_names)
-
 function nextTab()
-  loadstring(GetPluginVariable("b555825a4a5700c35fa80780", "tabs_names") or "")()
   cPlugin("nextTab")
 end
 
 function prevTab()
-  loadstring(GetPluginVariable("b555825a4a5700c35fa80780", "tabs_names") or "")()
   cPlugin("prevTab")
 end
 
 function tabset(name, line, wildcards)
-  loadstring(GetPluginVariable("b555825a4a5700c35fa80780", "tabs_names") or "")()
-  local str = wildcards[1]
-  if tabs_names[tonumber(str)] then
-    cPlugin(str)
-  else
-    for i,v in pairs(tabs_names) do
-      if v:upper() == str:upper() then
-        cPlugin(i)
-        break
-      end
-    end
-  end
+  cPlugin(wildcards[1])
 end
 
 Accelerator("alt + right", '\\\\\\CallPlugin("3a01e1807c17390aa06135a8", "nextTab")')

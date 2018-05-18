@@ -75,6 +75,20 @@ Show roomchars in a miniwindow with styling
 
 ### cycle_tabs.xml
 ```
+Finds matching help files for multiple keywords, currently only two
+
+Examples:
+  xhelp haste instinct
+
+Results:
+Accelerate          : The psionicist's ability to move at great speed.
+Haste               : A quickling's natural racial ability.
+Instinct            : Information on the instinct feature
+Amnesia             : Cause an opponent to forget his/her training.
+```
+
+### cycle_tabs.xml
+```
 Cycle through chat channel tabs with Alt+right and Alt+left
 Order via aliases:
   settab # -- number of tab starting at 1

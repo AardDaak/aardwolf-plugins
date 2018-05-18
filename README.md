@@ -73,7 +73,7 @@ Put this plugin inside Bast's folder:
 Show roomchars in a miniwindow with styling
 ```
 
-### cycle_tabs.xml
+### help_cross_reference.xml
 ```
 Finds matching help files for multiple keywords, currently only two
 
